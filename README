@@ -1,0 +1,17 @@
+# Mugbook #
+Detect bad guys automatically!
+
+## Adding mugshots from S3 uploads ##
+<br><br>
+<pre><code>
+$ aws rekognition index-faces --image '{"S3Object":{"Bucket":"mugbook","Name":"face.jpg"}}' --collection-id "mugshots" --region us-west-1
+</pre></code>
+<br><br>
+
+
+## Adding people from camera ##
+<br><br>
+<pre><code>
+$ aws rekognition  create-collection --collection-id mugshots
+</pre></code>
+<br><br>
