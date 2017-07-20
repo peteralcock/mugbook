@@ -3,7 +3,7 @@ require 'bundler'
 require 'dotenv'
 Bundler.require
 require 'sinatra'
-FACE_COLLECTION = "arrests"
+FACE_COLLECTION = "suspects"
 Dotenv.load
 
 Aws.config.update({
@@ -18,9 +18,6 @@ begin
 rescue => details
   puts details
 end
-
-
-
 
 
 get '/' do
@@ -47,17 +44,9 @@ post '/upload/:photoid/:crime_id' do
 
   begin
     client = Aws::Rekognition::Client.new()
-    response = client.index_faces({
-                                      collection_id: 'arrests',
-                                      external_image_id: params[:photoid],
-                                      image: {
-                                          bytes: request.body.read.to_s
-                                      }
-                                  })
+    
     response = client.index_faces({
     collection_id: crime_collection,
-    detection_attributes: [
-    'ALL'],
     external_image_id: params[:photoid],
     image: {
       bytes: request.body.read.to_s
@@ -67,8 +56,9 @@ post '/upload/:photoid/:crime_id' do
   rescue => details
     puts details
   end
+  crime_label = crime_collection.to_s.gsub("_", " ")
 
-  "Mugshot has been added to #{crime_collection}"
+  "Suspect has been added to #{crime_label.upcase}"
 
 end
 
@@ -89,7 +79,6 @@ post '/compare/:crime_id' do
   end
 
 
-  client = Aws::Rekognition::Client.new()
   response = client.search_faces_by_image({
                                               collection_id: crime_collection,
                                               max_faces: 1,
@@ -101,9 +90,11 @@ post '/compare/:crime_id' do
   if response.face_matches.count > 1
     {:message => "Too many faces found..."}.to_json
   elsif response.face_matches.count == 0
-    {:message => "Criminal not detected!"}.to_json
+    {:message => "Suspect not found!"}.to_json
   else
-    {:id => response.face_matches[0].face.external_image_id,:confidence => response.face_matches[0].face.confidence, :message => "WANTED FOR #{crime_collection}".upcase}.to_json
+    crime_label = crime_collection.to_s.gsub("_", " ")
+
+    {:id => response.face_matches[0].face.external_image_id,:confidence => response.face_matches[0].face.confidence, :message => "WANTED FOR #{crime_label}".upcase}.to_json
   end
 end
 

@@ -86,20 +86,23 @@ pre {
     </div>
     <br>
     <p>
-      <button class='btn btn-primary'  id='compare_image'>Analyze Face</button>
+      <button class='btn btn-primary'  id='compare_image'>Detect Criminal</button>
     </p>
     <br>
     <input id='photo_id' placeholder='Enter name for suspect' type='text'>
 
-<select id="crime_id" placeholder='Select violation type'>
-	<option  value="tax_evasion">Tax Evasion</option>
+<select id="crime_id" placeholder='Select violation'>
 	<option   value="jay_walking">Jay-Walking</option>
+	<option  value="tax_evasion">Tax Evasion</option>
+	<option   value="sex_offender">Sex Offender</option>
 	<option   value="armed_robbery">Armed Robbery</option>
-	<option   value="traffic_violation">Traffic Violation</option>
+	<option   value="traffic_violations">Traffic Violation</option>
 	<option   value="loitering">Loitering</option>
+	<option   value="public_drinking">Public Drinking</option>
+	<option   value="various_crimes">Other</option>
 </select>
 
-    <button id='add_to_collection' class='btn btn-warning'>Take Mugshot</button>
+    <button id='add_to_collection' class='btn btn-warning'>Add Mugshot</button>
     <br>
     <div id='upload_status'></div>
     <div id='upload_result' style="font-size:24px;color:white;"></div>
